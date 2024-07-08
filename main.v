@@ -137,13 +137,10 @@ fn main() {
 
 	data_json_array := data_json_u8
 	// println(write_result)
-	println(data_json_u8)
+	// println(data_json_u8)
 	println(typeof(data_json_u8))
-	println(data_json_u8.len)
-
-	for _, line in data_json_u8 {
-		println(line.hex())
-	}
+	data_json_u8_str := data_json_u8.bytestr()
+	println(data_json_u8_str)
 
 	// println(bc_json)
 
