@@ -4,11 +4,13 @@ import time
 import rand
 import json
 import blockchain
-import pool
-import miner
+import pool { Pool }
+import miner { Miner }
 import filestuff
 
 fn main() {
+	// Test comment
+	//
 	mut stopwatch := time.StopWatch{}
 	stopwatch.start()
 
@@ -71,4 +73,7 @@ fn main() {
 	// println(previous_block)
 	stopwatch.stop()
 	println('\n\nFinished all operations in ${stopwatch.elapsed()}')
+
+	miner_1 := Miner{}
+	pool_1 := Pool{}
 }
