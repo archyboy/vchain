@@ -66,16 +66,17 @@ pub fn (tb TransactionBox) get_last_transaction() !Transaction {
 	}
 }
 
-pub fn (mut bc Blockchain) insert_block(block Block) ! {
+pub fn (mut bc Blockchain) insert_block(block Block) int {
 	bc.blocks << block
+	return block.id
 }
 
 pub fn (mut bc Blockchain) new(transactionbox TransactionBox) !Block {
 	if bc.blocks.len < 1 {
 		return generate_genesis_block(time.now().str())
 	}
-
 	previous_block := bc.get_previous_block()!
+	// println('Creating new block to the blockchain with ID: ${previous_block.id}')
 
 	block := Block{
 		id: previous_block.id + 1
@@ -97,7 +98,7 @@ pub fn (tb TransactionBox) new(reciever string, amount f32, message string) !Tra
 			exit(1)
 		}
 	} else {
-		last_transaction.id = 0
+		last_transaction.id = -1
 	}
 	transaction := Transaction{
 		id: last_transaction.id + 1
@@ -110,18 +111,21 @@ pub fn (tb TransactionBox) new(reciever string, amount f32, message string) !Tra
 }
 
 fn main() {
+	mut stopwatch := time.StopWatch{}
+	stopwatch.start()
+
 	mut bc := Blockchain{}
 	mut tb := TransactionBox{}
 	// mut transactions := []Transaction
 
-	for i in 1 .. 50 {
+	for i in 0 .. 3 {
 		random_amount := rand.f32() * rand.int_in_range(1, 5000)!
 		tb.transactions << tb.new(rand.string(32), random_amount, 'ID: ${i} Text: This is the transaction message')!
 	}
 
-	for _ in 1 .. 5000 {
+	for _ in 0 .. 10_000 {
 		mut block := bc.new(tb)!
-		bc.insert_block(block)!
+		println('Inserting block: ${bc.insert_block(block)}')
 	}
 
 	bc_json := json.encode(bc)
@@ -129,19 +133,32 @@ fn main() {
 		println(err)
 		exit(1)
 	}
+	println(write_result)
 
 	data_json_u8 := filestuff.read_from_disk() or {
 		println(err)
-		return
+		exit(1)
 	}
 
-	data_json_array := data_json_u8
+	// data_json_array := data_json_u8
 	// println(write_result)
 	// println(data_json_u8)
-	println(typeof(data_json_u8))
+	// println(typeof(data_json_u8))
 	data_json_u8_str := data_json_u8.bytestr()
-	println(data_json_u8_str)
+	// println(data_json_u8_str)
 
+	// println(bc)
+
+	// bc2 := Blockchain{}
+	data_struct := json.decode(Blockchain, data_json_u8_str) or {
+		println('Failed to decode JSON, error: ${err}')
+		return
+	}
+	println(data_struct.blocks[0])
+
+	transaction := data_struct.blocks[1].transactionbox.transactions[0]
+	println(transaction.message)
+	println(transaction.hash)
 	// println(bc_json)
 
 	// println(block_1)
@@ -154,4 +171,6 @@ fn main() {
 	// println(bc)
 	// println(tb)
 	// println(previous_block)
+	stopwatch.stop()
+	println('\n\nFinished all operations in ${stopwatch.elapsed()}')
 }

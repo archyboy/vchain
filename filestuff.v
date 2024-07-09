@@ -3,7 +3,7 @@ module filestuff
 import os
 
 pub fn write_to_disk(bc_json string) !string {
-	mut filename := os.create('blockchai.json') or {
+	mut filename := os.create('blockchain.json') or {
 		return error('Oooops..Could not write to file')
 	}
 
@@ -16,11 +16,17 @@ pub fn write_to_disk(bc_json string) !string {
 }
 
 pub fn read_from_disk() ![]u8 {
-	mut filename := 'blockchai.json'
+	mut filename := 'blockchain.json'
 	mut file := os.open(filename) or { return error('Oooops..Could not read file') }
+	filesize := os.file_size(filename)
+	if filesize > 1_000_000_000 {
+		println('File is too big...Exiting')
+		exit(1)
+	} else {
+		println('Reading data from: ${filename}')
+	}
 
-	println('Reading data.....')
-	mut data_json := file.read_bytes(1000)
+	mut data_json := file.read_bytes(1_000_000_000)
 
 	file.close() // always close file descriptor
 
