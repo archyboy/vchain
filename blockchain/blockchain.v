@@ -53,13 +53,13 @@ pub fn (mut bc Blockchain) new(transactionbox TransactionBox) !Block {
 	previous_block := bc.get_previous_block()!
 	// println('Creating new block to the blockchain with ID: ${previous_block.id}')
 
-	block := Block{
+	mut block := Block{
 		id: previous_block.id + 1
-		hash: sha256.hexhash(time.now().str() + rand.string(256))
 		previous_block_hash: bc.get_previous_block()!.hash
 		data: 'This is a new block on the chain'
 		transactionbox: transactionbox
 		timestamp: time.now().str()
 	}
+	block.hash = sha256.hexhash(previous_block.hash + block.str())
 	return block
 }
