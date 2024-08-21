@@ -10,7 +10,6 @@ import miner
 import filestuff
 import steps
 
-const difficulty = 6
 const valid_last_hash = '96dcf8ef9da4b3413498b7b06543d767b4263cae4c6051a8eb56bf9a42576f40'
 
 fn main() {
@@ -18,7 +17,7 @@ fn main() {
 	mut tb := blockchain.TransactionBox{}
 	// mut transactions := []Transaction
 
-	for i in 0 .. difficulty {
+	for i in 0 .. 3 {
 		random_amount := rand.f32() * rand.int_in_range(1, 5000)!
 		tb.transactions << tb.new(rand.string(32), rand.string(32), random_amount, 'ID: ${i} Text: This is the transaction message')!
 	}
