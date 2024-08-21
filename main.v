@@ -116,9 +116,16 @@ fn main() {
 		}
 	}
 
+	mut stopwatch_mining := time.StopWatch{}
+	stopwatch_mining.start()
+
 	steps.start_mining()
 
-	// mut new_miner_1 := miner.Miner{}
+	stopwatch_mining.stop()
+
+	println('\n\nFinished all operations in ${stopwatch_mining.elapsed()}')
+
+	// // mut new_miner_1 := miner.Miner{}
 	// new_miner_1.name = 'AndyBoy'
 	// mut new_miner_2 := miner.Miner{}
 	// new_miner_2.name = 'TestBoy'
