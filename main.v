@@ -11,6 +11,7 @@ import filestuff
 import steps
 
 const valid_last_hash = '96dcf8ef9da4b3413498b7b06543d767b4263cae4c6051a8eb56bf9a42576f40'
+// Little comment test
 
 fn main() {
 	// Test comment
