@@ -10,20 +10,15 @@ import miner
 import filestuff
 import steps
 
+const difficulty = 6
 const valid_last_hash = '96dcf8ef9da4b3413498b7b06543d767b4263cae4c6051a8eb56bf9a42576f40'
-// Little comment test
 
 fn main() {
-	// Test comment
-	//
-	mut stopwatch := time.StopWatch{}
-	stopwatch.start()
-
 	mut bc := blockchain.Blockchain{}
 	mut tb := blockchain.TransactionBox{}
 	// mut transactions := []Transaction
 
-	for i in 0 .. 3 {
+	for i in 0 .. difficulty {
 		random_amount := rand.f32() * rand.int_in_range(1, 5000)!
 		tb.transactions << tb.new(rand.string(32), rand.string(32), random_amount, 'ID: ${i} Text: This is the transaction message')!
 	}
@@ -52,6 +47,9 @@ fn main() {
 			}
 		}
 	}
+
+	mut stopwatch := time.StopWatch{}
+	stopwatch.start()
 
 	data_json_u8 := filestuff.read_from_disk() or {
 		println(err)
@@ -89,7 +87,7 @@ fn main() {
 	// println(tb)
 	// println(previous_block)
 	stopwatch.stop()
-	println('\n\nFinished all operations in ${stopwatch.elapsed()}')
+	println('\nFinished all loading operations in ${stopwatch.elapsed()}\n')
 
 	last_block_hash := data_struct.blocks[data_struct.blocks.len - 1].hash
 
@@ -118,7 +116,7 @@ fn main() {
 
 	steps.start_mining()
 
-	// mut new_miner_1 := miner.Miner{}
+	// // mut new_miner_1 := miner.Miner{}
 	// new_miner_1.name = 'AndyBoy'
 	// mut new_miner_2 := miner.Miner{}
 	// new_miner_2.name = 'TestBoy'
